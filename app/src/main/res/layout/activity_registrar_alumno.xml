@@ -95,6 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Usar ubicación actual"
+            android:visibility="gone"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/azulMarino"
             android:textColor="@color/textoClaro" />
@@ -104,6 +105,7 @@
             android:id="@+id/mapa"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="300dp"
             android:layout_marginTop="15dp" />
 

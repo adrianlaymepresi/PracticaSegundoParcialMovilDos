@@ -3,12 +3,19 @@ package com.example.practicasegundoparcial
 import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.*
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.practicasegundoparcial.database.AlumnoDAO
 import com.example.practicasegundoparcial.firebase.AlumnoFirebase
 import com.example.practicasegundoparcial.firebase.BaseDatosFirebase
@@ -22,7 +29,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import java.util.*
 
-class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
+class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback, SensorEventListener {
 
     private lateinit var etCi: EditText
     private lateinit var etNombres: EditText
@@ -43,6 +50,10 @@ class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
     private var tieneConexion: Boolean = false
     private var mediaPlayer: MediaPlayer? = null
 
+    // SENSOR DE PROXIMIDAD
+    private lateinit var sensorManager: SensorManager
+    private var sensorProximidad: Sensor? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_alumno)
@@ -55,6 +66,10 @@ class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
         networkSensor = NetworkSensorUtils(this) { estado ->
             tieneConexion = !estado.contains("Sin conexión")
         }
+
+        // INICIALIZAR SENSOR DE PROXIMIDAD
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensorProximidad = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
 
         etCi = findViewById(R.id.etCi)
         etNombres = findViewById(R.id.etNombres)
@@ -130,12 +145,20 @@ class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         networkSensor.iniciarMonitoreo()
+
+        // ACTIVAR SENSOR DE PROXIMIDAD
+        sensorProximidad?.let {
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
     }
 
     override fun onPause() {
         super.onPause()
         networkSensor.detenerMonitoreo()
         liberarMediaPlayer()
+
+        // DESACTIVAR SENSOR DE PROXIMIDAD
+        sensorManager.unregisterListener(this)
     }
 
     override fun onDestroy() {
@@ -247,5 +270,36 @@ class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
         etFecha.text.clear()
         etLat.text.clear()
         etLng.text.clear()
+    }
+
+    override fun onSensorChanged(event: SensorEvent) {
+        if (event.sensor.type == Sensor.TYPE_PROXIMITY) {
+            val distancia = event.values[0]
+            val max = sensorProximidad?.maximumRange ?: return
+
+            // Si el sensor está tapado (distancia < máximo)
+            if (distancia < max) {
+                // Verificar permisos antes de asignar ubicación
+                val tienePermisoFine = ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+
+                val tienePermisoCoarse = ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+
+                if (tienePermisoFine && tienePermisoCoarse) {
+                    // Asignar ubicación actual automáticamente
+                    usarUbicacionActual()
+                    Toast.makeText(this, "TAPASTE SENSOR PROXIMIDAD", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // No necesitamos implementar esto
     }
 }
