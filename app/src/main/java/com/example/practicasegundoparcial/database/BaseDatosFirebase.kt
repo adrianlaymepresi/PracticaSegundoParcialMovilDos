@@ -59,4 +59,10 @@ class BaseDatosFirebase(private val context: Context) {
                 listener(lista)
             }
     }
+    fun eliminarAlumnoPorId(id: String, onSuccess: () -> Unit) {
+        db.collection(COLECCION_ALUMNOS)
+            .document(id)
+            .delete()
+            .addOnSuccessListener { onSuccess() }
+    }
 }

@@ -16,6 +16,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PracticaSegundoParcial">
+        <activity
+            android:name=".RutaDosAlumnosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListaAlumnosFirebaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListaAlumnosSQLiteActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:weightSum="2">
+            android:weightSum="1">
 
             <Button
                 android:id="@+id/btnCrearAlumno"
@@ -50,18 +50,8 @@
                 android:textStyle="bold"
                 android:textColor="@color/textoClaro"
                 android:backgroundTint="@color/azulMarino"
-                android:layout_margin="8dp"/>
+                android:layout_margin="2dp"/>
 
-            <Button
-                android:id="@+id/btnListaAlumnos"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="LISTA ALUMNOS"
-                android:textStyle="bold"
-                android:textColor="@color/textoClaro"
-                android:backgroundTint="@color/azulMarino"
-                android:layout_margin="8dp"/>
         </LinearLayout>
 
         <!-- FILA 2 -->
@@ -73,14 +63,54 @@
             android:weightSum="1">
 
             <Button
-                android:id="@+id/btnRutas"
+                android:id="@+id/btnRutaDosAlumnos"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:text="RUTA ENTRE ALUMNOS"
                 android:textColor="@color/textoClaro"
                 android:backgroundTint="@color/azulMarino"
-                android:layout_margin="8dp"/>
+                android:layout_margin="2dp"/>
+        </LinearLayout>
+
+        <!-- FILA 3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/btnListaAlumnosSqlite"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="LISTA ALUMNOS SQLITE"
+                android:textStyle="bold"
+                android:textColor="@color/textoClaro"
+                android:backgroundTint="@color/azulMarino"
+                android:layout_margin="2dp"/>
+        </LinearLayout>
+
+        <!-- FILA 4 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/btnListaAlumnosFirebase"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="LISTA ALUMNOS FIREBASE"
+                android:textStyle="bold"
+                android:textColor="@color/textoClaro"
+                android:backgroundTint="@color/azulMarino"
+                android:layout_margin="2dp"/>
         </LinearLayout>
 
     </LinearLayout>

@@ -11,6 +11,9 @@ class MainActivity : AppCompatActivity() {
 
     // COMPONENTES UI
     private lateinit var btnCrearAlumno: Button
+    private lateinit var btnListaAlumnosSqlite: Button
+    private lateinit var btnListaAlumnosFirebase: Button
+    private lateinit var btnRutaDosAlumnos: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,9 +22,31 @@ class MainActivity : AppCompatActivity() {
 
         // INICIALIZAR COMPONENTES UI
         btnCrearAlumno = findViewById(R.id.btnCrearAlumno)
+        btnListaAlumnosSqlite = findViewById(R.id.btnListaAlumnosSqlite)
+        btnListaAlumnosFirebase = findViewById(R.id.btnListaAlumnosFirebase)
+        btnRutaDosAlumnos = findViewById(R.id.btnRutaDosAlumnos)
+
         btnCrearAlumno.setOnClickListener {
             // NAVEGAR A LA ACTIVIDAD DE CREAR ALUMNO
             val intent = Intent(this, RegistrarAlumno::class.java)
+            startActivity(intent)
+        }
+
+        btnListaAlumnosSqlite.setOnClickListener {
+            // NAVEGAR A LA ACTIVIDAD DE LISTA DE ALUMNOS DESDE SQLITE
+            val intent = Intent(this, ListaAlumnosSQLiteActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnListaAlumnosFirebase.setOnClickListener {
+            // NAVEGAR A LA ACTIVIDAD DE LISTA DE ALUMNOS DESDE FIREBASE
+            val intent = Intent(this, ListaAlumnosFirebaseActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnRutaDosAlumnos.setOnClickListener {
+            // NAVEGAR A LA ACTIVIDAD DE RUTA DOS ALUMNOS
+            val intent = Intent(this, RutaDosAlumnosActivity::class.java)
             startActivity(intent)
         }
 

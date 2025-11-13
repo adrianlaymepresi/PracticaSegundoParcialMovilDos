@@ -43,6 +43,10 @@ dependencies {
     // api de localización GPS
     implementation("com.google.android.gms:play-services-location:21.3.0")
 
+    // para rutas
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("org.json:json:20240303")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

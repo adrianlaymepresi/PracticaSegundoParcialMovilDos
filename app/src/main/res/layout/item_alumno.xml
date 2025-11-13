@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/crema"
+    android:layout_marginBottom="10dp">
+
+    <TextView
+        android:id="@+id/tvNombreCompleto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre Apellido"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@color/azulMarino" />
+
+    <TextView
+        android:id="@+id/tvCi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CI:" />
+
+    <TextView
+        android:id="@+id/tvFecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fecha:" />
+
+    <TextView
+        android:id="@+id/tvLatLng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lat/Lng:" />
+
+    <Button
+        android:id="@+id/btnEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="ELIMINAR"
+        android:textStyle="bold"
+        android:backgroundTint="@color/guindo"
+        android:textColor="@color/textoClaro"
+        android:layout_marginTop="10dp"/>
+</LinearLayout>
