@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/crema"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- TÍTULO -->
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PRINCIPAL"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="12dp"
+            android:background="@color/guindo"
+            android:textColor="@color/textoClaro"/>
+
+        <!-- ESPACIO -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <!-- FILA 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btnCrearAlumno"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="CREAR ALUMNO"
+                android:textStyle="bold"
+                android:textColor="@color/textoClaro"
+                android:backgroundTint="@color/azulMarino"
+                android:layout_margin="8dp"/>
+
+            <Button
+                android:id="@+id/btnListaAlumnos"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="LISTA ALUMNOS"
+                android:textStyle="bold"
+                android:textColor="@color/textoClaro"
+                android:backgroundTint="@color/azulMarino"
+                android:layout_margin="8dp"/>
+        </LinearLayout>
+
+        <!-- FILA 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/btnRutas"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="RUTA ENTRE ALUMNOS"
+                android:textColor="@color/textoClaro"
+                android:backgroundTint="@color/azulMarino"
+                android:layout_margin="8dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

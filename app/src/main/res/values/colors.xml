@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="crema">#DED3B1</color>
+    <color name="guindo">#7B1E3A</color>
+    <color name="rojoCrema">#DE9BAA</color>
+    <color name="azulMarino">#0D1B2A</color>
+    <color name="azulSuave">#415A77</color>
+    <color name="textoClaro">#FFFFFF</color>
+    <color name="textoOscuro">#1A1A1A</color>
+    <color name="celeste">#B7D2EF</color>
+</resources>

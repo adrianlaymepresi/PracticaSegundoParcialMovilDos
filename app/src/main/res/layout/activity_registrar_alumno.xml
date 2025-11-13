@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/crema"
+    tools:context=".RegistrarAlumno">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- TÍTULO -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Registrar Alumno"
+            android:textColor="@color/textoClaro"
+            android:background="@color/guindo"
+            android:padding="12dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+
+        <!-- CI -->
+        <EditText
+            android:id="@+id/etCi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="CI"
+            android:maxLength="9"
+            android:inputType="number"
+            android:layout_marginTop="10dp"/>
+
+        <!-- Nombres -->
+        <EditText
+            android:id="@+id/etNombres"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombres"
+            android:maxLength="50"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZáéíóúÁÉÍÓÚñÑ "
+            android:layout_marginTop="10dp" />
+
+        <!-- Apellidos -->
+        <EditText
+            android:id="@+id/etApellidos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Apellidos"
+            android:maxLength="50"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZáéíóúÁÉÍÓÚñÑ "
+            android:layout_marginTop="10dp" />
+
+        <!-- Fecha nacimiento -->
+        <EditText
+            android:id="@+id/etFecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fecha de nacimiento"
+            android:focusable="false"
+            android:clickable="true"
+            android:layout_marginTop="10dp" />
+
+        <!-- Latitud
+        Para que no se pueda editar, usar
+        android:focusable="false"
+        android:clickable="false"
+        -->
+        <EditText
+            android:id="@+id/etLatitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Latitud"
+            android:inputType="numberDecimal|numberSigned"
+            android:layout_marginTop="10dp" />
+
+        <!-- Longitud -->
+        <EditText
+            android:id="@+id/etLongitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Longitud"
+            android:inputType="numberDecimal|numberSigned"
+            android:layout_marginTop="10dp" />
+
+        <!-- BOTÓN UBICACIÓN ACTUAL -->
+        <Button
+            android:id="@+id/btnUbicacionActual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Usar ubicación actual"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/azulMarino"
+            android:textColor="@color/textoClaro" />
+
+        <!-- MAPA -->
+        <fragment
+            android:id="@+id/mapa"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="15dp" />
+
+        <!-- BOTÓN REGISTRAR -->
+        <Button
+            android:id="@+id/btnRegistrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Registrar Alumno"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/azulMarino"
+            android:textColor="@color/textoClaro"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+</ScrollView>
