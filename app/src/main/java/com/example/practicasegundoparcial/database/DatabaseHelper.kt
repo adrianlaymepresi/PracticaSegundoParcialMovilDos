@@ -9,7 +9,7 @@ class DatabaseHelper(context: Context) :
 
     companion object {
         const val DATABASE_NOMBRE = "segundoparcial.db"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2  // Incrementado de 1 a 2 para forzar recreación
 
         // TABLA ALUMNO
         const val TABLA_ALUMNO = "Alumno"
@@ -69,6 +69,7 @@ class DatabaseHelper(context: Context) :
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL("DROP TABLE IF EXISTS $TABLA_ALUMNO")
+        db?.execSQL("DROP TABLE IF EXISTS $TABLA_SENSOR")
         onCreate(db)
     }
 }

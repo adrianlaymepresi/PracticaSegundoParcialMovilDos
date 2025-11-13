@@ -28,6 +28,7 @@ class BaseDatosSensorFirebase(private val context: Context) {
 
     fun obtenerTodos(listener: (List<RegistroSensorFirebase>) -> Unit): ListenerRegistration {
         return db.collection(COLECCION)
+            .orderBy("fecha", com.google.firebase.firestore.Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     Log.e(TAG, "Error obteniendo registros", error)

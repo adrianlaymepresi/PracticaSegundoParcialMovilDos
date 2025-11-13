@@ -39,6 +39,11 @@ class SensorProximidad : AppCompatActivity() {
             dao = RegistroSensorDAO(this)
             firebase = BaseDatosSensorFirebase(this)
 
+            // Configurar callback para actualizar lista de SQLite cuando se guarde un registro
+            utils.onRegistroGuardado = {
+                cargarSqlite()
+            }
+
             val btnElegir = findViewById<Button>(R.id.btnElegirAudio)
             val btnLimpiar = findViewById<Button>(R.id.btnLimpiarRegistros)
 

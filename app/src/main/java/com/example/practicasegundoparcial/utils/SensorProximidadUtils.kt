@@ -46,6 +46,9 @@ class SensorProximidadUtils(private val context: Context) : SensorEventListener 
 
     private var ultimoRegistro = 0L // Para evitar registros duplicados
 
+    // Callback para notificar cuando se guarda un registro
+    var onRegistroGuardado: (() -> Unit)? = null
+
     companion object {
         const val REQ_AUDIO = 3000
     }
@@ -172,8 +175,11 @@ class SensorProximidadUtils(private val context: Context) : SensorEventListener 
                     nombreCancion = nombreAudio
                 )
 
-                dao.insertar(reg)
+                // Guardar en SQLite
+                val idInsertado = dao.insertar(reg)
+                Log.d(TAG, "Registro guardado en SQLite con ID: $idInsertado")
 
+                // Guardar en Firebase
                 val regFb = RegistroSensorFirebase(
                     id = null,
                     fecha = fecha,
@@ -188,7 +194,13 @@ class SensorProximidadUtils(private val context: Context) : SensorEventListener 
 
                 firebase.agregar(regFb)
 
+                // Mostrar el último registro en pantalla
                 mostrarRegistroEnPantalla(reg)
+
+                // Notificar a la actividad que se guardó un registro para que actualice la lista
+                (context as? Activity)?.runOnUiThread {
+                    onRegistroGuardado?.invoke()
+                }
             }.addOnFailureListener { e ->
                 Log.e(TAG, "Error al obtener ubicación: ${e.message}")
             }

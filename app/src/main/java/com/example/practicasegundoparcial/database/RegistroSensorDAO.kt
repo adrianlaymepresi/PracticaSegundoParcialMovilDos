@@ -3,57 +3,90 @@ package com.example.practicasegundoparcial.database
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 import com.example.practicasegundoparcial.models.RegistroSensor
 
 class RegistroSensorDAO(context: Context) {
 
     private val dbHelper = DatabaseHelper(context)
+    private val TAG = "RegistroSensorDAO"
 
     fun insertar(reg: RegistroSensor): Long {
-        val db = dbHelper.writableDatabase
-        val valores = ContentValues()
-        valores.put(DatabaseHelper.SEN_FECHA, reg.fecha)
-        valores.put(DatabaseHelper.SEN_PROX, reg.proximidad)
-        valores.put(DatabaseHelper.SEN_AX, reg.ax)
-        valores.put(DatabaseHelper.SEN_AY, reg.ay)
-        valores.put(DatabaseHelper.SEN_AZ, reg.az)
-        valores.put(DatabaseHelper.SEN_LAT, reg.latitud)
-        valores.put(DatabaseHelper.SEN_LON, reg.longitud)
-        valores.put(DatabaseHelper.SEN_AUDIO, reg.nombreCancion)
-        val id = db.insert(DatabaseHelper.TABLA_SENSOR, null, valores)
-        db.close()
-        return id
+        var db: SQLiteDatabase? = null
+        return try {
+            db = dbHelper.writableDatabase
+            val valores = ContentValues().apply {
+                put(DatabaseHelper.SEN_FECHA, reg.fecha)
+                put(DatabaseHelper.SEN_PROX, reg.proximidad)
+                put(DatabaseHelper.SEN_AX, reg.ax)
+                put(DatabaseHelper.SEN_AY, reg.ay)
+                put(DatabaseHelper.SEN_AZ, reg.az)
+                put(DatabaseHelper.SEN_LAT, reg.latitud)
+                put(DatabaseHelper.SEN_LON, reg.longitud)
+                put(DatabaseHelper.SEN_AUDIO, reg.nombreCancion)
+            }
+            val id = db.insert(DatabaseHelper.TABLA_SENSOR, null, valores)
+            Log.d(TAG, "Registro insertado en SQLite con ID: $id")
+            id
+        } catch (e: Exception) {
+            Log.e(TAG, "Error al insertar registro en SQLite: ${e.message}")
+            -1L
+        } finally {
+            db?.close()
+        }
     }
 
     fun obtenerTodos(): List<RegistroSensor> {
         val lista = mutableListOf<RegistroSensor>()
-        val db = dbHelper.readableDatabase
-        val cursor = db.rawQuery(
-            "SELECT * FROM ${DatabaseHelper.TABLA_SENSOR} ORDER BY ${DatabaseHelper.SEN_ID} DESC",
-            null
-        )
-        while (cursor.moveToNext()) {
-            val reg = RegistroSensor(
-                id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.SEN_ID)),
-                fecha = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.SEN_FECHA)),
-                proximidad = cursor.getFloat(cursor.getColumnIndexOrThrow(DatabaseHelper.SEN_PROX)),
-                ax = cursor.getFloat(cursor.getColumnIndexOrThrow(DatabaseHelper.SEN_AX)),
-                ay = cursor.getFloat(cursor.getColumnIndexOrThrow(DatabaseHelper.SEN_AY)),
-                az = cursor.getFloat(cursor.getColumnIndexOrThrow(DatabaseHelper.SEN_AZ)),
-                latitud = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.SEN_LAT)),
-                longitud = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.SEN_LON)),
-                nombreCancion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.SEN_AUDIO))
+        var db: SQLiteDatabase? = null
+        return try {
+            db = dbHelper.readableDatabase
+            val cursor = db.rawQuery(
+                "SELECT * FROM ${DatabaseHelper.TABLA_SENSOR} ORDER BY ${DatabaseHelper.SEN_ID} DESC",
+                null
             )
-            lista.add(reg)
+
+            cursor.use {
+                while (it.moveToNext()) {
+                    try {
+                        val reg = RegistroSensor(
+                            id = it.getInt(it.getColumnIndexOrThrow(DatabaseHelper.SEN_ID)),
+                            fecha = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.SEN_FECHA)),
+                            proximidad = it.getFloat(it.getColumnIndexOrThrow(DatabaseHelper.SEN_PROX)),
+                            ax = it.getFloat(it.getColumnIndexOrThrow(DatabaseHelper.SEN_AX)),
+                            ay = it.getFloat(it.getColumnIndexOrThrow(DatabaseHelper.SEN_AY)),
+                            az = it.getFloat(it.getColumnIndexOrThrow(DatabaseHelper.SEN_AZ)),
+                            latitud = it.getDouble(it.getColumnIndexOrThrow(DatabaseHelper.SEN_LAT)),
+                            longitud = it.getDouble(it.getColumnIndexOrThrow(DatabaseHelper.SEN_LON)),
+                            nombreCancion = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.SEN_AUDIO))
+                        )
+                        lista.add(reg)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error al leer registro de SQLite: ${e.message}")
+                    }
+                }
+            }
+
+            Log.d(TAG, "Total registros obtenidos de SQLite: ${lista.size}")
+            lista
+        } catch (e: Exception) {
+            Log.e(TAG, "Error al obtener registros de SQLite: ${e.message}")
+            emptyList()
+        } finally {
+            db?.close()
         }
-        cursor.close()
-        db.close()
-        return lista
     }
 
     fun eliminarTodos() {
-        val db: SQLiteDatabase = dbHelper.writableDatabase
-        db.delete(DatabaseHelper.TABLA_SENSOR, null, null)
-        db.close()
+        var db: SQLiteDatabase? = null
+        try {
+            db = dbHelper.writableDatabase
+            val count = db.delete(DatabaseHelper.TABLA_SENSOR, null, null)
+            Log.d(TAG, "Registros eliminados de SQLite: $count")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error al eliminar registros de SQLite: ${e.message}")
+        } finally {
+            db?.close()
+        }
     }
 }
