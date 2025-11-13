@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/crema">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sensor de proximidad"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/guindo"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/btnElegirAudio"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Elegir audio personalizado"
+            android:textColor="@color/textoClaro"
+            android:backgroundTint="@color/azulMarino"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnLimpiarRegistros"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Limpiar registros"
+            android:textColor="@color/textoClaro"
+            android:backgroundTint="@color/guindo"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tvUltimosRegistros"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Último registro:"
+            android:textSize="14sp"
+            android:textColor="@color/textoOscuro"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Registros en SQLite"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/azulMarino"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/tvRegistrosSqlite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/textoOscuro"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Registros en Firebase"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/azulSuave"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/tvRegistrosFirebase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/textoOscuro"
+            android:layout_marginTop="4dp" />
+
+    </LinearLayout>
+</ScrollView>

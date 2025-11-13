@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnListaAlumnosSqlite: Button
     private lateinit var btnListaAlumnosFirebase: Button
     private lateinit var btnRutaDosAlumnos: Button
+    private lateinit var btnSensorProximidad: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         btnListaAlumnosSqlite = findViewById(R.id.btnListaAlumnosSqlite)
         btnListaAlumnosFirebase = findViewById(R.id.btnListaAlumnosFirebase)
         btnRutaDosAlumnos = findViewById(R.id.btnRutaDosAlumnos)
+        btnSensorProximidad = findViewById(R.id.btnSensorProximidad)
 
         btnCrearAlumno.setOnClickListener {
             // NAVEGAR A LA ACTIVIDAD DE CREAR ALUMNO
@@ -50,5 +52,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        btnSensorProximidad.setOnClickListener {
+            // NAVEGAR A LA ACTIVIDAD DE SENSOR DE PROXIMIDAD
+            val intent = Intent(this, SensorProximidad::class.java)
+            startActivity(intent)
+        }
     }
 }
