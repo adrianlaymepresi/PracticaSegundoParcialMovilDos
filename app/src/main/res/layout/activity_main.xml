@@ -33,6 +33,24 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"/>
 
+        <!-- ESTADO DE CONEXIÓN -->
+        <TextView
+            android:id="@+id/tvEstadoConexion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📶 Verificando conexión..."
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="12dp"
+            android:background="@color/azulMarino"
+            android:textColor="@color/textoClaro"/>
+
+        <!-- ESPACIO -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
         <!-- FILA 1 -->
         <LinearLayout
             android:layout_width="match_parent"

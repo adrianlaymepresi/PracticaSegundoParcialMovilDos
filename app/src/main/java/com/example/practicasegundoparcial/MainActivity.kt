@@ -4,8 +4,10 @@ package com.example.practicasegundoparcial
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.practicasegundoparcial.utils.NetworkSensorUtils
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,6 +17,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnListaAlumnosFirebase: Button
     private lateinit var btnRutaDosAlumnos: Button
     private lateinit var btnSensorProximidad: Button
+    private lateinit var tvEstadoConexion: TextView
+
+    // SENSOR DE RED
+    private lateinit var networkSensor: NetworkSensorUtils
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +33,14 @@ class MainActivity : AppCompatActivity() {
         btnListaAlumnosFirebase = findViewById(R.id.btnListaAlumnosFirebase)
         btnRutaDosAlumnos = findViewById(R.id.btnRutaDosAlumnos)
         btnSensorProximidad = findViewById(R.id.btnSensorProximidad)
+        tvEstadoConexion = findViewById(R.id.tvEstadoConexion)
+
+        // INICIALIZAR SENSOR DE RED
+        networkSensor = NetworkSensorUtils(this) { estado ->
+            runOnUiThread {
+                tvEstadoConexion.text = estado
+            }
+        }
 
         btnCrearAlumno.setOnClickListener {
             // NAVEGAR A LA ACTIVIDAD DE CREAR ALUMNO
@@ -57,5 +71,17 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SensorProximidad::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // INICIAR MONITOREO DEL SENSOR DE RED
+        networkSensor.iniciarMonitoreo()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // DETENER MONITOREO DEL SENSOR DE RED
+        networkSensor.detenerMonitoreo()
     }
 }
