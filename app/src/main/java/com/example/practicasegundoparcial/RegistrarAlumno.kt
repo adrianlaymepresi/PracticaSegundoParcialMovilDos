@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.*
 import androidx.annotation.RequiresPermission
@@ -40,6 +41,7 @@ class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var networkSensor: NetworkSensorUtils
 
     private var tieneConexion: Boolean = false
+    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,6 +135,26 @@ class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
     override fun onPause() {
         super.onPause()
         networkSensor.detenerMonitoreo()
+        liberarMediaPlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        liberarMediaPlayer()
+    }
+
+    private fun liberarMediaPlayer() {
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    private fun reproducirSonido(recursoId: Int) {
+        liberarMediaPlayer()
+        mediaPlayer = MediaPlayer.create(this, recursoId)
+        mediaPlayer?.setOnCompletionListener {
+            liberarMediaPlayer()
+        }
+        mediaPlayer?.start()
     }
 
     private fun registrarAlumno() {
@@ -191,6 +213,9 @@ class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
             return
         }
 
+        // val musicaUno = MediaPlayer.create(this, R.raw.local)
+        // musicaUno.start()
+
         // VERIFICAR SI HAY CONEXIÓN PARA FIREBASE
         if (tieneConexion) {
             // INSERTAR EN FIREBASE INMEDIATAMENTE
@@ -200,15 +225,17 @@ class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
 
             firebaseDB.agregarAlumno(alumnoFB, {
                 Toast.makeText(this, "✅ Registrado en SQLite y Firebase", Toast.LENGTH_LONG).show()
+                reproducirSonido(R.raw.ambos) // REPRODUCIR SONIDO AMBOS
                 limpiarCampos()
             }, {
                 Toast.makeText(this, "⚠️ Registrado en SQLite. Error en Firebase", Toast.LENGTH_LONG).show()
+                reproducirSonido(R.raw.local) // REPRODUCIR SONIDO LOCAL POR ERROR
                 limpiarCampos()
             })
         } else {
             // SIN CONEXIÓN, SOLO SQLITE - Se subirá automáticamente cuando haya conexión
-            Toast.makeText(this, "✅ Registrado en SQLite.", Toast.LENGTH_LONG).show()
-            Toast.makeText(this, "✅ Se sincronizará con Firebase cuando haya conexión", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "📱 Registrado en SQLite. Se sincronizará con Firebase cuando haya conexión", Toast.LENGTH_LONG).show()
+            reproducirSonido(R.raw.local) // REPRODUCIR SONIDO LOCAL
             limpiarCampos()
         }
     }
