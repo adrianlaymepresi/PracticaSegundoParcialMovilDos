@@ -2,7 +2,6 @@ package com.example.practicasegundoparcial.firebase
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
@@ -20,17 +19,11 @@ class BaseDatosFirebase(private val context: Context) {
         db.collection(COLECCION_ALUMNOS)
             .add(alumno)
             .addOnSuccessListener { referencia ->
-                val msg = "Alumno guardado con ID: ${referencia.id}"
-                Log.d(TAG, msg)
-                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-
+                Log.d(TAG, "Alumno guardado con ID: ${referencia.id}")
                 onSuccess()
             }
             .addOnFailureListener { error ->
-                val msg = "Error al guardar alumno: ${error.message}"
-                Log.e(TAG, msg)
-                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-
+                Log.e(TAG, "Error al guardar alumno: ${error.message}")
                 onFailure(error)
             }
     }
@@ -64,5 +57,20 @@ class BaseDatosFirebase(private val context: Context) {
             .document(id)
             .delete()
             .addOnSuccessListener { onSuccess() }
+    }
+
+    fun eliminarAlumnoPorCI(ci: Int, onSuccess: () -> Unit) {
+        db.collection(COLECCION_ALUMNOS)
+            .whereEqualTo("ci", ci)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                for (documento in querySnapshot.documents) {
+                    documento.reference.delete()
+                }
+                onSuccess()
+            }
+            .addOnFailureListener { error ->
+                Log.e(TAG, "Error al eliminar por CI: ${error.message}")
+            }
     }
 }

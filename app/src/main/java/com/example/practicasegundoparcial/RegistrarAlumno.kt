@@ -13,6 +13,7 @@ import com.example.practicasegundoparcial.firebase.AlumnoFirebase
 import com.example.practicasegundoparcial.firebase.BaseDatosFirebase
 import com.example.practicasegundoparcial.models.Alumno
 import com.example.practicasegundoparcial.utils.MapsUtils
+import com.example.practicasegundoparcial.utils.NetworkSensorUtils
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -36,6 +37,9 @@ class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var alumnoDAO: AlumnoDAO
     private lateinit var firebaseDB: BaseDatosFirebase
+    private lateinit var networkSensor: NetworkSensorUtils
+
+    private var tieneConexion: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +48,11 @@ class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
         alumnoDAO = AlumnoDAO(this)
         firebaseDB = BaseDatosFirebase(this)
         mapsUtils = MapsUtils(this)
+
+        // INICIALIZAR SENSOR DE RED
+        networkSensor = NetworkSensorUtils(this) { estado ->
+            tieneConexion = !estado.contains("Sin conexión")
+        }
 
         etCi = findViewById(R.id.etCi)
         etNombres = findViewById(R.id.etNombres)
@@ -116,6 +125,16 @@ class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        networkSensor.iniciarMonitoreo()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        networkSensor.detenerMonitoreo()
+    }
+
     private fun registrarAlumno() {
 
         val ciText = etCi.text.toString()
@@ -152,21 +171,46 @@ class RegistrarAlumno : AppCompatActivity(), OnMapReadyCallback {
             return
         }
 
-        // INSERTAR EN SQLITE
-        val alumno = Alumno(0, ci, nombres, apellidos, fecha, lat, lng)
-        alumnoDAO.insertar(alumno)
-
-        // INSERTAR EN FIREBASE
-        val alumnoFB = AlumnoFirebase(
-            null, ci, nombres, apellidos, fecha, lat, lng
+        // INSERTAR EN SQLITE (SIEMPRE)
+        // Si no hay conexión, marcar como pendiente de sincronización
+        val alumno = Alumno(
+            id = 0,
+            ci = ci,
+            nombres = nombres,
+            apellidos = apellidos,
+            fechaNacimiento = fecha,
+            latitud = lat,
+            longitud = lng,
+            pendienteSync = !tieneConexion
         )
 
-        firebaseDB.agregarAlumno(alumnoFB, {
-            Toast.makeText(this, "Alumno registrado correctamente", Toast.LENGTH_LONG).show()
+        val resultado = alumnoDAO.insertar(alumno)
+
+        if (resultado == -1L) {
+            Toast.makeText(this, "Error al registrar en SQLite", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // VERIFICAR SI HAY CONEXIÓN PARA FIREBASE
+        if (tieneConexion) {
+            // INSERTAR EN FIREBASE INMEDIATAMENTE
+            val alumnoFB = AlumnoFirebase(
+                null, ci, nombres, apellidos, fecha, lat, lng
+            )
+
+            firebaseDB.agregarAlumno(alumnoFB, {
+                Toast.makeText(this, "✅ Registrado en SQLite y Firebase", Toast.LENGTH_LONG).show()
+                limpiarCampos()
+            }, {
+                Toast.makeText(this, "⚠️ Registrado en SQLite. Error en Firebase", Toast.LENGTH_LONG).show()
+                limpiarCampos()
+            })
+        } else {
+            // SIN CONEXIÓN, SOLO SQLITE - Se subirá automáticamente cuando haya conexión
+            Toast.makeText(this, "✅ Registrado en SQLite.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "✅ Se sincronizará con Firebase cuando haya conexión", Toast.LENGTH_LONG).show()
             limpiarCampos()
-        }, {
-            Toast.makeText(this, "Error en Firebase", Toast.LENGTH_SHORT).show()
-        })
+        }
     }
 
     private fun limpiarCampos() {

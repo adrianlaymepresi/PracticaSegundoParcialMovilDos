@@ -19,6 +19,7 @@ class AlumnoDAO(context: Context) {
         valores.put(DatabaseHelper.ALU_FECHA_NAC, alumno.fechaNacimiento)
         valores.put(DatabaseHelper.ALU_LATITUD, alumno.latitud)
         valores.put(DatabaseHelper.ALU_LONGITUD, alumno.longitud)
+        valores.put(DatabaseHelper.ALU_PENDIENTE_SYNC, if (alumno.pendienteSync) 1 else 0)
 
         val id = db.insert(DatabaseHelper.TABLA_ALUMNO, null, valores)
         db.close()
@@ -40,7 +41,8 @@ class AlumnoDAO(context: Context) {
                 apellidos = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_APELLIDOS)),
                 fechaNacimiento = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_FECHA_NAC)),
                 latitud = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_LATITUD)),
-                longitud = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_LONGITUD))
+                longitud = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_LONGITUD)),
+                pendienteSync = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_PENDIENTE_SYNC)) == 1
             )
             lista.add(alumno)
         }
@@ -48,6 +50,52 @@ class AlumnoDAO(context: Context) {
         cursor.close()
         db.close()
         return lista
+    }
+
+    // OBTENER PENDIENTES DE SINCRONIZACIÓN
+    fun obtenerPendientesSync(): List<Alumno> {
+        val lista = mutableListOf<Alumno>()
+        val db = dbHelper.readableDatabase
+
+        val cursor = db.rawQuery(
+            "SELECT * FROM ${DatabaseHelper.TABLA_ALUMNO} WHERE ${DatabaseHelper.ALU_PENDIENTE_SYNC}=1",
+            null
+        )
+
+        while (cursor.moveToNext()) {
+            val alumno = Alumno(
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_ID)),
+                ci = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_CI)),
+                nombres = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_NOMBRES)),
+                apellidos = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_APELLIDOS)),
+                fechaNacimiento = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_FECHA_NAC)),
+                latitud = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_LATITUD)),
+                longitud = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.ALU_LONGITUD)),
+                pendienteSync = true
+            )
+            lista.add(alumno)
+        }
+
+        cursor.close()
+        db.close()
+        return lista
+    }
+
+    // MARCAR COMO SINCRONIZADO
+    fun marcarComoSincronizado(ci: Int): Int {
+        val db = dbHelper.writableDatabase
+        val valores = ContentValues()
+        valores.put(DatabaseHelper.ALU_PENDIENTE_SYNC, 0)
+
+        val filas = db.update(
+            DatabaseHelper.TABLA_ALUMNO,
+            valores,
+            "${DatabaseHelper.ALU_CI}=?",
+            arrayOf(ci.toString())
+        )
+
+        db.close()
+        return filas
     }
 
     // OBTENER POR ID (PK autoincremental)
@@ -137,6 +185,20 @@ class AlumnoDAO(context: Context) {
             DatabaseHelper.TABLA_ALUMNO,
             "${DatabaseHelper.ALU_ID}=?",
             arrayOf(idAlumno.toString())
+        )
+
+        db.close()
+        return filas
+    }
+
+    // ELIMINAR POR CI
+    fun eliminarPorCI(ci: Int): Int {
+        val db = dbHelper.writableDatabase
+
+        val filas = db.delete(
+            DatabaseHelper.TABLA_ALUMNO,
+            "${DatabaseHelper.ALU_CI}=?",
+            arrayOf(ci.toString())
         )
 
         db.close()

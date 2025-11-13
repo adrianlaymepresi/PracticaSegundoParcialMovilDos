@@ -9,7 +9,7 @@ class DatabaseHelper(context: Context) :
 
     companion object {
         const val DATABASE_NOMBRE = "segundoparcial.db"
-        const val DATABASE_VERSION = 2  // Incrementado de 1 a 2 para forzar recreación
+        const val DATABASE_VERSION = 3  // Incrementado para agregar campo pendiente_sync
 
         // TABLA ALUMNO
         const val TABLA_ALUMNO = "Alumno"
@@ -21,6 +21,7 @@ class DatabaseHelper(context: Context) :
         const val ALU_FECHA_NAC = "fechaNacimiento"
         const val ALU_LATITUD = "latitud"
         const val ALU_LONGITUD = "longitud"
+        const val ALU_PENDIENTE_SYNC = "pendiente_sync"  // 0 = sincronizado, 1 = pendiente
 
         const val TABLA_SENSOR = "RegistroSensor"
         const val SEN_ID = "id"
@@ -43,7 +44,8 @@ class DatabaseHelper(context: Context) :
                 $ALU_APELLIDOS TEXT NOT NULL,
                 $ALU_FECHA_NAC TEXT NOT NULL,
                 $ALU_LATITUD REAL NOT NULL,
-                $ALU_LONGITUD REAL NOT NULL
+                $ALU_LONGITUD REAL NOT NULL,
+                $ALU_PENDIENTE_SYNC INTEGER NOT NULL DEFAULT 0
             );
         """.trimIndent()
 

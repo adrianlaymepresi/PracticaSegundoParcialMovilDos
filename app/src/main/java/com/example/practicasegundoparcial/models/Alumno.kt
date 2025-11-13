@@ -7,5 +7,6 @@ data class Alumno(
     var apellidos: String,
     var fechaNacimiento: String,
     var latitud: Double,
-    var longitud: Double
+    var longitud: Double,
+    var pendienteSync: Boolean = false  // Indica si está pendiente de sincronizar con Firebase
 )
